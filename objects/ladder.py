@@ -1,4 +1,5 @@
 import objects.bracket as bracket
+import objects.ladder_legacy as ladder_legacy
 
 
 def getMatchId(matchData):
@@ -46,58 +47,6 @@ class Class(object):
             for entry in mappoolRound:
                 matches.append(entry)
         return matches
-
-    # TODO: Refactor this function
-    def getMatchFromSuggestedOrder(self, challongeMatchId: int):
-        internalMatchId = challongeMatchId - 1
-        poolLength = len(self.ladder[0])
-        i = 0
-        passedMatchesCount = 0
-        checksFulfilled = 0
-        # Why the fuck is this loop so hard to read?
-        while checksFulfilled < 3:
-            if i == 0:
-                if challongeMatchId <= poolLength:
-                    return self.ladder[i][internalMatchId]
-                passedMatchesCount = poolLength
-            else:
-                if checksFulfilled == 0:
-                    passedMatchesCount += poolLength * 2 if i == 1 else poolLength * 4
-                else:
-                    passedMatchesCount += 1
-                if challongeMatchId <= passedMatchesCount:
-                    # Offset what? Why did i make it like this? I don't get it
-                    offset = passedMatchesCount - poolLength
-                    matchCount = poolLength * 4
-                    if checksFulfilled > 1:
-                        matchCount -= 1
-                    middleIndex = int(matchCount / 2)
-                    if i % 2 == 0:
-                        if challongeMatchId > offset and i != len(self.ladder) - 1:
-                            return self.ladder[i][internalMatchId - passedMatchesCount + poolLength]
-                        if i == 4:
-                            matchIndex = internalMatchId - passedMatchesCount + middleIndex
-                            return self.getMatchFromFifthRound(matchIndex, middleIndex, poolLength)
-                        matchIndex = -challongeMatchId + passedMatchesCount - poolLength
-                        if matchIndex < poolLength:
-                            matchIndex = -challongeMatchId + passedMatchesCount - middleIndex
-                        return self.ladder[i][matchIndex]
-
-                    if challongeMatchId > offset:
-                        return self.ladder[i][internalMatchId - passedMatchesCount + poolLength]
-                    if i == 3:
-                        matchIndex = -challongeMatchId + passedMatchesCount - middleIndex
-                        return self.getMatchFromFourthRound(matchIndex, middleIndex, poolLength)
-                    return self.ladder[i][internalMatchId - passedMatchesCount + poolLength]
-            i += 1
-            poolLength = int(poolLength / 2)
-            if poolLength < 1:
-                checksFulfilled += 1
-                poolLength = 1
-            i = i if i < len(self.ladder) else len(self.ladder) - 1
-        if challongeMatchId == len(self.ladder[0]) * 4 - 1:
-            return self.ladder[i][-1]
-        return None
 
     def getMatchFromFourthRound(self, matchIndex, middleIndex, poolLength):
         if matchIndex >= middleIndex / 2:
@@ -150,4 +99,4 @@ class Class(object):
     def getMatch(self, challongeMatchId: int, isIdentifier: bool = False):
         if isIdentifier:
             return self.getMatchFromIdentifier(challongeMatchId)
-        return self.getMatchFromSuggestedOrder(challongeMatchId)
+        return ladder_legacy.getMatchFromSuggestedOrder(self, challongeMatchId)

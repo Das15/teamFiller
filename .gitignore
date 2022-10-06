@@ -5,3 +5,7 @@ mappool.txt
 teams.txt
 /data/
 /config.cfg
+/build
+/dist
+/.idea
+main.spec

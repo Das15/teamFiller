@@ -12,6 +12,7 @@ class Class(object):
     def __hash__(self):
         return hash(self.__key())
 
+    # noinspection PyPep8Naming
     def __init__(self, Name, Description=None, BestOf=9, Beatmaps=None, StartDate=datetime.datetime.now(),
                  Matches=None):
         if Matches is None:

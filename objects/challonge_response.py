@@ -6,40 +6,40 @@ import logging
 ALPHABET_LENGTH = 26
 
 
-def getMatchId(identifier):
+def get_match_id(identifier):
     id = 0
     exponential = 0
     for i in reversed(range(len(identifier))):
-        orderOfLetter = ord(identifier[i]) - 64
-        id += (ALPHABET_LENGTH ** exponential) * orderOfLetter
+        position_of_letter = ord(identifier[i]) - 64
+        id += (ALPHABET_LENGTH ** exponential) * position_of_letter
         exponential += 1
     return id
 
 
-def assignScores(matchData, scores):
+def assign_scores(match_data, scores):
     if scores[0] != "" and scores[1] != "":
         if scores[1] == "-1":
-            matchData.Team1Score = matchData.PointsToWin
-            matchData.Team2Score = "0"
+            match_data.Team1Score = match_data.PointsToWin
+            match_data.Team2Score = "0"
         elif scores[0] == "-1":
-            matchData.Team1Score = "0"
-            matchData.Team2Score = matchData.PointsToWin
+            match_data.Team1Score = "0"
+            match_data.Team2Score = match_data.PointsToWin
         else:
-            matchData.Team1Score = scores[0]
-            matchData.Team2Score = scores[1]
+            match_data.Team1Score = scores[0]
+            match_data.Team2Score = scores[1]
     else:
-        matchData.Team1Score = "0"
-        matchData.Team2Score = "0"
-    return matchData
+        match_data.Team1Score = "0"
+        match_data.Team2Score = "0"
+    return match_data
 
 
 class Class(object):
     def __init__(self, body):
         self._body = body
 
-    def getPlayerName(self, playerId):
+    def get_player_name(self, player_id):
         for player in self.body["participants"]:
-            if player["id"] == playerId:
+            if player["id"] == player_id:
                 return player["name"]
         return None
 
@@ -47,31 +47,32 @@ class Class(object):
     def body(self):
         return self._body
 
-    def replaceAcronyms(self, bracketData: bracket.Class):
-        ladderData = ladder.Class(bracketData)
+    def replace_acronyms(self, bracket_data: bracket.Class):
+        ladder_data = ladder.Class(bracket_data)
         for i in range(len(self.body["matches"])):
-            challongeMatch = self.body["matches"][i]
+            challonge_match = self.body["matches"][i]
             try:
-                if challongeMatch["player1_id"] is None or challongeMatch["player2_id"] is None:
+                if challonge_match["player1_id"] is None or challonge_match["player2_id"] is None:
                     continue
-                teamNames = [self.getPlayerName(challongeMatch["player1_id"]),
-                             self.getPlayerName((challongeMatch["player2_id"]))]
-                acronyms = [bracketData.getAcronymFromName(teamNames[0]), bracketData.getAcronymFromName(teamNames[1])]
-                matchId = getMatchId(challongeMatch["identifier"])
-                bracketMatch = ladderData.getMatch(matchId, True)
-                minusPos = challongeMatch["scores_csv"].find("-")
-                if minusPos == 0:
-                    scores = [0, bracketMatch.PointsToWin]
+                team_names = [self.get_player_name(challonge_match["player1_id"]),
+                              self.get_player_name((challonge_match["player2_id"]))]
+                acronyms = [bracket_data.get_acronym_from_name(team_names[0]),
+                            bracket_data.get_acronym_from_name(team_names[1])]
+                match_id = get_match_id(challonge_match["identifier"])
+                bracket_match = ladder_data.get_match(match_id, True)
+                minus_pos = challonge_match["scores_csv"].find("-")
+                if minus_pos == 0:
+                    scores = [0, bracket_match.PointsToWin]
                 else:
-                    scores = [challongeMatch["scores_csv"][0:minusPos], challongeMatch["scores_csv"][minusPos+1:]]
-                bracketMatch.replaceAcronyms(acronyms)
-                bracketMatch = assignScores(bracketMatch, scores)
-                bracketMatch.Completed = True
-                bracketMatch.Current = False
-                bracketData.replaceMatch(bracketMatch)
+                    scores = [challonge_match["scores_csv"][0:minus_pos], challonge_match["scores_csv"][minus_pos+1:]]
+                bracket_match.replace_acronyms(acronyms)
+                bracket_match = assign_scores(bracket_match, scores)
+                bracket_match.Completed = True
+                bracket_match.Current = False
+                bracket_data.replace_match(bracket_match)
             except AttributeError:
-                logging.fatal(f'Cannot find match id {challongeMatch["suggested_play_order"]} in bracket json file.')
+                logging.fatal(f'Cannot find match id {challonge_match["suggested_play_order"]} in bracket json file.')
                 print("Fatal error, read logs for details.")
                 exit(1)
         logging.info(f"Processed {len(self.body['matches'])} matches from challonge response.")
-        return bracketData
+        return bracket_data

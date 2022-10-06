@@ -1,7 +1,7 @@
-import apiRequests.bancho.querries as banchoApi
-import apiRequests.challonge.querries as challongeApi
+import apiRequests.bancho.querries as bancho_api
+import apiRequests.challonge.querries as challonge_api
 
 
-def initializeApiKeys():
-    banchoApi.initialize()
-    challongeApi.initialize()
+def initialize_api_keys():
+    bancho_api.initialize()
+    challonge_api.initialize()

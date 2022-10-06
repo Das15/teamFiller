@@ -7,21 +7,21 @@ import time
 CACHE_PATH = os.path.join(os.getcwd(), "data", "challonge_cache")
 
 
-def addEntryToCache(requestData) -> None:
+def add_entry_to_cache(request_data) -> None:
     if not os.path.exists(CACHE_PATH):
         os.makedirs(CACHE_PATH)
-    with open(os.path.join(CACHE_PATH, f'{requestData["url"].lower()}.json'), "w", encoding="utf-8") \
+    with open(os.path.join(CACHE_PATH, f'{request_data["url"].lower()}.json'), "w", encoding="utf-8") \
             as file:
-        file.write(jp.encode(requestData, unpicklable=False))
+        file.write(jp.encode(request_data, unpicklable=False))
 
 
-def readCache(tourneyName):
-    path = os.path.join(CACHE_PATH, f"{tourneyName.lower()}.json")
+def read_cache(tourney_name):
+    path = os.path.join(CACHE_PATH, f"{tourney_name.lower()}.json")
     if os.path.exists(path):
-        fileModificationTimestamp = round(time.time() - os.path.getmtime(path))
-        logging.info(f"Diff of current and file creation time of challonge responnse is {fileModificationTimestamp} "
+        file_modification_timestamp = round(time.time() - os.path.getmtime(path))
+        logging.info(f"Diff of current and file creation time of challonge responnse is {file_modification_timestamp} "
                      f"seconds.")
-        if fileModificationTimestamp > 7200:
+        if file_modification_timestamp > 7200:
             return None
 
         with open(path, "r", encoding="utf-8") as file:
@@ -30,7 +30,7 @@ def readCache(tourneyName):
 
 
 # For debugging purposes, ie checking if cache works correctly.
-def getObjDebug():
+def get_obj_debug():
     path = os.path.join(os.getcwd(), "apiRequests", "challonge", "wmt_challonge_api.json")
     with open(path, "r", encoding="utf-8") as file:
         logging.info("Loading debug json challonge response.")

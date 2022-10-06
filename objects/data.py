@@ -2,25 +2,25 @@ import codecs
 import logging
 
 
-def parseEntry(entry):
+def parse_entry(entry):
     temp = []
-    dataList = entry.split("\t")
-    for data in dataList:
+    data_list = entry.split("\t")
+    for data in data_list:
         if data != "":
             temp.append(data.replace("\r", ""))
     return temp
 
 
-def parseCsvDataFromStringList(string):
+def parse_csv_data_from_string_list(string):
     temp = []
     for entry in string:
         if entry.split("\t") != [""]:
-            temp.append(parseEntry(entry))
+            temp.append(parse_entry(entry))
     return temp
 
 
-def loadRawData(path):
+def load_raw_data(path):
     logging.log(logging.INFO, f"Loading teams_data from '{path}'")
     with codecs.open(path, "r", encoding="utf-8") as file:
         temp = file.read().split("\n")
-    return parseCsvDataFromStringList(temp)
+    return parse_csv_data_from_string_list(temp)

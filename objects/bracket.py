@@ -9,6 +9,7 @@ import jsonpickle as jp
 
 
 class Class(object):
+    # noinspection PyPep8Naming
     def __init__(self, Ruleset, Matches, Rounds, Teams, Progressions, ChromaKeyWidth, PlayersPerTeam):
         temp = []
         self.Ruleset = ruleset.Class(**Ruleset)
@@ -28,35 +29,35 @@ class Class(object):
         self.ChromaKeyWidth = ChromaKeyWidth
         self.PlayersPerTeam = PlayersPerTeam
 
-    def getAcronymFromName(self, teamName):
+    def get_acronym_from_name(self, team_name):
         for i in range(len(self.Teams)):
-            if teamName == self.Teams[i].FullName:
+            if team_name == self.Teams[i].FullName:
                 return self.Teams[i].Acronym
         return None
 
-    def replaceMatch(self, matchData: match.Class):
+    def replace_match(self, match_data: match.Class):
         for i in range(len(self.Matches)):
-            if matchData.ID == self.Matches[i].ID:
-                self.Matches[i] = matchData
+            if match_data.ID == self.Matches[i].ID:
+                self.Matches[i] = match_data
                 return True
         return False
 
-    def getMatchId(self, acronyms, caseInsensitive=True):
+    def get_match_id(self, acronyms, case_insensitive=True):
         for i in range(len(self.Matches)):
-            if caseInsensitive:
-                matchAcronyms = [self.Matches[i].Team1Acronym.lower(), self.Matches[i].Team2Acronym.lower()]
+            if case_insensitive:
+                match_acronyms = [self.Matches[i].Team1Acronym.lower(), self.Matches[i].Team2Acronym.lower()]
             else:
-                matchAcronyms = self.Matches[i].Acronyms
-            if acronyms[0] in matchAcronyms and acronyms[1] in matchAcronyms:
+                match_acronyms = self.Matches[i].Acronyms
+            if acronyms[0] in match_acronyms and acronyms[1] in match_acronyms:
                 return i
         return None
 
 # Using jsonpickle to avoid json encoding issues, like crashes on datatime (no clue what this means exactly, huh)
-    def writeToFile(self, filePath):
-        if filePath is None:
-            filePath = "output.json"
+    def write_to_file(self, file_path):
+        if file_path is None:
+            file_path = "output.json"
         jp.set_encoder_options("json", indent=2)
-        with codecs.open(filePath, "w", encoding="utf-8") as file:
+        with codecs.open(file_path, "w", encoding="utf-8") as file:
             file.write(jp.encode(self, unpicklable=False))
 
 

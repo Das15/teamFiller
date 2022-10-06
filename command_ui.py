@@ -9,85 +9,81 @@ import wx
 import logging
 
 
-def fillMappool(bracketData, modsFilepath="mods.txt"):
-    secondaryPath = str(os.path.join(os.getcwd(), "mappool.txt"))
-    mappoolPath = getFilePath(os.getcwd(), "Open mappool data", openedFileOnFail=secondaryPath)
-    mappool = mappool_data.Class(bracketData.Rounds, modsFilepath, mappoolPath)
-    mappool.getMappool()
-    return mappool.bracketMappools
+def fill_mappool(bracket_data, mods_filepath="mods.txt"):
+    secondary_path = str(os.path.join(os.getcwd(), "mappool.txt"))
+    mappool_path = get_file_path(os.getcwd(), "Open mappool data", opened_file_on_fail=secondary_path)
+    mappool = mappool_data.Class(bracket_data.Rounds, mods_filepath, mappool_path)
+    mappool.get_mappool()
+    return mappool.bracket_mappools
 
 
-def fillLadder(bracketData):
-    tourneyChallongeCode = input("Please write challonge tournament id (last part of link): ")
+def fill_ladder(bracket_data):
+    tourney_challonge_code = input("Please write challonge tournament id (last part of link): ")
 
-    challongeData = challonge_response.Class(challonge_request.getTournament(tourneyChallongeCode))
-    return challongeData.replaceAcronyms(bracketData)
-
-
-def fillTeams(bracketData, assumeOrderBySeeds=True):
-    secondaryPath = str(os.path.join(os.path.join(os.getcwd(), "teams.txt")))
-    teamsDataPath = getFilePath(os.getcwd(), "Open teams data", openedFileOnFail=secondaryPath)
-    teamsData = teams_data.Class(teamsDataPath, assumeOrderBySeeds)
-    for team in teamsData.teams:
-        bracketData.append(team)
-    logging.info(f"Added {len(teamsData.teams)} teams into bracket file.")
-    return bracketData
+    challonge_data = challonge_response.Class(challonge_request.get_tournament(tourney_challonge_code))
+    return challonge_data.replace_acronyms(bracket_data)
 
 
-def getFilePath(defaultDir=None, windowTitle="Open", openedFileOnFail=None):
+def fill_teams(bracket_data, assume_order_by_seeds=True):
+    secondary_path = str(os.path.join(os.path.join(os.getcwd(), "teams.txt")))
+    teams_data_path = get_file_path(os.getcwd(), "Open teams data", opened_file_on_fail=secondary_path)
+    data = teams_data.Class(teams_data_path, assume_order_by_seeds)
+    for team in data.teams:
+        bracket_data.append(team)
+    logging.info(f"Added {len(data.teams)} teams into bracket file.")
+    return bracket_data
+
+
+# noinspection PyUnusedLocal
+def get_file_path(default_dir=None, window_title="Open", opened_file_on_fail=None):
     app = wx.App(None)
     style = wx.FD_OPEN | wx.FD_FILE_MUST_EXIST
-    dialog = wx.FileDialog(None, windowTitle, style=style)
-    if defaultDir:
-        dialog.SetDirectory(defaultDir)
+    dialog = wx.FileDialog(None, window_title, style=style)
+    if default_dir:
+        dialog.SetDirectory(default_dir)
     if dialog.ShowModal() == wx.ID_OK:
         path = dialog.GetPath()
     else:
-        if openedFileOnFail:
-            os.startfile(openedFileOnFail)
+        if opened_file_on_fail:
+            os.startfile(opened_file_on_fail)
             input("Press enter when done editing the file.")
-            return openedFileOnFail
+            return opened_file_on_fail
         path = None
     dialog.Destroy()
     return path
 
 
-def executeFunctions(answers, bracketData=None):
-    bracketPath = None
+def execute_functions(answers, bracket_data=None):
+    bracket_path = None
     if answers:
-        while bracketPath is None:
-            bracketPath = getFilePath(f"{os.getenv('APPDATA')}\\osu\\tournaments\\", "Open bracket file")
-        bracketData = bracket.load_json(bracketPath)
+        while bracket_path is None:
+            bracket_path = get_file_path(f"{os.getenv('APPDATA')}\\osu\\tournaments\\", "Open bracket file")
+        bracket_data = bracket.load_json(bracket_path)
 
-        backupBracketFile(bracketData, bracketPath)
+        backup_bracket_file(bracket_data, bracket_path)
 
     if "Mappool" in answers:
-        bracketData.Rounds = fillMappool(bracketData)
+        bracket_data.Rounds = fill_mappool(bracket_data)
     if "Ladder" in answers:
-        bracketData = fillLadder(bracketData)
+        bracket_data = fill_ladder(bracket_data)
     if "Teams" in answers:
-        bracketData = fillTeams(bracketData)
-    bracketData.writeToFile(bracketPath)
+        bracket_data = fill_teams(bracket_data)
+    bracket_data.writeToFile(bracket_path)
 
 
-def backupBracketFile(bracketData, bracketPath):
-    backupPath = "\\".join(bracketPath.split("\\")[:-1]) + "\\backup.json"
-    tempPath = backupPath
+def backup_bracket_file(bracket_data, bracket_path):
+    backup_path = "\\".join(bracket_path.split("\\")[:-1]) + "\\backup.json"
+    temp_path = backup_path
     i = 1
-    while os.path.exists(tempPath):
-        splitPath = backupPath.split(".")
-        tempPath = f"{splitPath[0]}{i}.{splitPath[1]}"
+    while os.path.exists(temp_path):
+        split_path = backup_path.split(".")
+        temp_path = f"{split_path[0]}{i}.{split_path[1]}"
         i += 1
-    bracketData.writeToFile(tempPath)
-    logging.info(f"Bracket file backupped at {tempPath}")
+    bracket_data.write_to_file(temp_path)
+    logging.info(f"Bracket file backupped at {temp_path}")
 
 
-def checkApiKeys():
-    pass
-
-
-def initializeUi():
-    checkApiKeys()
+def initialize_ui():
     questions = [
         inquirer.Checkbox("options",
                           message="What parts of bracket file would you like to update?",
@@ -102,4 +98,4 @@ def initializeUi():
         exit(0)
 
     logging.info(f"Selected options in ui: {str(answers)}")
-    executeFunctions(answers)
+    execute_functions(answers)

@@ -1,7 +1,8 @@
-import objects.beatmap_info as beatmapInfo
+import objects.beatmap_info as beatmap_info
 import logging
 
 
+# noinspection PyPep8Naming
 class Class(object):
     def __key(self):
         return self.ID, self.Mods, self.BeatmapInfo
@@ -22,7 +23,7 @@ class Class(object):
                 try:
                     if BeatmapInfo["Metadata"] is not None:
                         if BeatmapInfo["OnlineID"] is not None:
-                            self.BeatmapInfo = beatmapInfo.Class(**BeatmapInfo)
+                            self.BeatmapInfo = beatmap_info.Class(**BeatmapInfo)
                 except AttributeError:
                     logging.error(f"Didn't found id {ID} in BeatmapInfo.")
                 except TypeError:

@@ -1,4 +1,5 @@
 class Class(object):
+    # noinspection PyPep8Naming
     def __init__(self, ID, Team1Acronym=None, Team1Score=None, Team2Acronym=None, Team2Score=None, Completed=None,
                  Losers=None, PicksBans=None, Current=None, Date=None, ConditionalMatches=None, Position=None,
                  Acronyms=None, WinnerColour=None, PointsToWin=None):
@@ -20,7 +21,7 @@ class Class(object):
         self.WinnerColour = WinnerColour
         self.PointsToWin = PointsToWin
 
-    def replaceAcronyms(self, newAcronyms: []):
-        self.Team1Acronym = newAcronyms[0]
-        self.Team2Acronym = newAcronyms[1]
-        self.Acronyms = newAcronyms
+    def replace_acronyms(self, new_acronyms: []):
+        self.Team1Acronym = new_acronyms[0]
+        self.Team2Acronym = new_acronyms[1]
+        self.Acronyms = new_acronyms

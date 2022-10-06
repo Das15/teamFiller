@@ -94,6 +94,12 @@ def initializeUi():
                           choices=["Mappool", "Ladder", "Teams"],
                           carousel=True),
     ]
-    answers = inquirer.prompt(questions)["options"]
+    answers = None
+    try:
+        answers = inquirer.prompt(questions)["options"]
+    except TypeError:
+        logging.info("User cancelled selection, closing the script.")
+        exit(0)
+
     logging.info(f"Selected options in ui: {str(answers)}")
     executeFunctions(answers)

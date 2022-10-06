@@ -1,4 +1,5 @@
 from importlib import reload
+from apiRequests.general import initializeApiKeys
 
 import command_ui
 import objects.bracket as bracket
@@ -40,6 +41,7 @@ def main():
     reload(logging)
     logging.basicConfig(level=logging.DEBUG, filename="logs.log", filemode="w",
                         format='%(asctime)s %(levelname)s - %(message)s', datefmt="%d-%m-%y %H:%M:%S")
+    initializeApiKeys()
     command_ui.initializeUi()
 
 

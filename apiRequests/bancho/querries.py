@@ -5,7 +5,15 @@ import requests
 import apiRequests.bancho.cache as cache
 import config
 
-APIKEY = config.getConfigValue("bancho_api_key")
+APIKEY = None
+
+
+def initialize():
+    """
+    Loads api key from config file.
+    """
+    global APIKEY
+    APIKEY = config.getConfigValue("bancho_api_key")
 
 
 def requestUserId(username):
@@ -30,7 +38,7 @@ def checkIfUserIdExists(userId):
     if cache.checkUserId(userId):
         return True
     data = {"k": APIKEY, "u": userId, "type": "id"}
-    logging.info(f"Checking if user with ID {userId} exists.")
+    logging.info(f"Checking if user with ID '{userId}' exists.")
 
     re = requests.get("https://osu.ppy.sh/api/get_user", params=data)
     if int(re.status_code) == 200 and re.json() != []:

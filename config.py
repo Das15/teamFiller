@@ -10,7 +10,7 @@ config = {}
 
 
 @enum.unique
-class verification_type(enum.Enum):
+class VerificationType(enum.Enum):
     NONE = 0
     BANCHO = 1
     CHALLONGE_KEY = 2

@@ -1,7 +1,6 @@
 import logging
 import os.path
 import enum
-import requests
 
 import apiRequests.bancho.querries as bancho_api
 import apiRequests.challonge.querries as challonge_api
@@ -14,7 +13,6 @@ class VerificationType(enum.Enum):
     NONE = 0
     BANCHO = 1
     CHALLONGE_KEY = 2
-    CHALLONGE_USERNAME = 3
 
 
 def create_config_file(config_dictionary):
@@ -45,16 +43,13 @@ def create_config():
     temp_config = [ConfigItem("bancho_api_key", "Please paste your bancho API key here: ",
                               VerificationType.BANCHO),
                    ConfigItem("challonge_api_key", "Please paste your challonge API key here (can be left empty): ",
-                              VerificationType.CHALLONGE_KEY),
-                   ConfigItem("challonge_username", "Please write your challonge username here (can be left empty): ",
-                              VerificationType.CHALLONGE_USERNAME)]
-    config_data = get_config_data(temp_config)
+                              VerificationType.CHALLONGE_KEY)]
+    config_data = get_and_verify_config_data(temp_config)
     create_config_file(config_data)
 
 
-def get_config_data(temp_config):
+def get_and_verify_config_data(temp_config):
     config_data = {}
-    is_challonge_key_valid = False
     for item in temp_config:
         while True:
             temp = input(item.inputLabel)
@@ -74,18 +69,6 @@ def get_config_data(temp_config):
                 check = challonge_api.check_challonge_key(temp)
                 if not check:
                     print("Challonge api key is invalid.")
-                    continue
-                is_challonge_key_valid = True
-                break
-            if item.verifyData == VerificationType.CHALLONGE_USERNAME:
-                if not is_challonge_key_valid:
-                    break
-                try:
-                    challonge_api.USERNAME = temp
-                    challonge_api.request_tournament("MP5D", False)
-                except requests.HTTPError as e:
-                    logging.error(f"Username verification failed: {e.args[0]}")
-                    print("Username is invalid.")
                     continue
                 break
         config_data[item.keyName] = temp

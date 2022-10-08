@@ -7,36 +7,36 @@ import requests
 
 
 API_KEY = None
-USERNAME = None
+# I must say, why the heck do i have to spook user-agent? Oh well...
+DEFAULT_HEADERS = {"User-Agent": "Mozilla/5.0 (Windows 6.1; Win64; x64"}
 
 
 def initialize():
     """
 Loads api key and username from config file.
     """
-    global API_KEY, USERNAME
+    global API_KEY
     API_KEY = config.get_config_value("challonge_api_key")
-    USERNAME = config.get_config_value("challonge_username")
 
 
 # Does not have time.sleep, use it cautiously
 def request_tournament(tourney_name, get_participants_and_matches=True):
-    logging.info(f"Getting challonge bracket for tournament '{tourney_name}'.")
-    challonge.set_credentials(USERNAME, API_KEY)
-    tournament = challonge.tournaments.show(tourney_name)
+    data = {"api_key": API_KEY, "include_participants": 0, "include_matches": 0}
     if get_participants_and_matches:
-        tournament["participants"] = challonge.participants.index(tourney_name)
-        tournament["matches"] = challonge.matches.index(tourney_name)
-    return tournament
+        data["include_participants"] = 1
+        data["include_matches"] = 1
+    logging.info(f"Getting challonge bracket for tournament '{tourney_name}'.")
+    re = requests.get(f"https://api.challonge.com/v1/tournaments/{tourney_name}.json", data, headers=DEFAULT_HEADERS)
+    if re.status_code == 200:
+        return re.json()[0]
+    logging.error(f"Requesting tournament failed, response code: '{re.status_code}'")
 
 
 def check_challonge_key(challonge_api_key):
     data = {"api_key": challonge_api_key, "include_participants": 0, "include_matches": 0}
-    # I wish challonge api wouldn't require me to add user agent.
-    headers = {"User-Agent": "Mozilla/5.0 (Windows 6.1; Win64; x64"}
     logging.info(f"Checking if '{challonge_api_key}' challonge key is valid.")
 
-    re = requests.get("https://api.challonge.com/v1/tournaments/MP5D.json", data, headers=headers)
+    re = requests.get("https://api.challonge.com/v1/tournaments/MP5D.json", data, headers=DEFAULT_HEADERS)
     if re.status_code == 200:
         return True
     logging.error(f"Checking challonge key failed, response code: '{re.status_code}'.")

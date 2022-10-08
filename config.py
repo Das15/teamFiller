@@ -34,21 +34,20 @@ def get_config_value(key):
 
 
 class ConfigItem(object):
-    def __init__(self, key_name: str, input_label: str, verify_data: verification_type):
+    def __init__(self, key_name: str, input_label: str, verify_data: VerificationType):
         self.keyName = key_name
         self.inputLabel = input_label
         self.verifyData = verify_data
 
 
-# TODO: Verify if API keys are correct
 def create_config():
     # Note to myself: osu key has length of 40
     temp_config = [ConfigItem("bancho_api_key", "Please paste your bancho API key here: ",
-                              verification_type.BANCHO),
+                              VerificationType.BANCHO),
                    ConfigItem("challonge_api_key", "Please paste your challonge API key here (can be left empty): ",
-                              verification_type.CHALLONGE_KEY),
+                              VerificationType.CHALLONGE_KEY),
                    ConfigItem("challonge_username", "Please write your challonge username here (can be left empty): ",
-                              verification_type.CHALLONGE_USERNAME)]
+                              VerificationType.CHALLONGE_USERNAME)]
     config_data = get_config_data(temp_config)
     create_config_file(config_data)
 
@@ -59,7 +58,7 @@ def get_config_data(temp_config):
     for item in temp_config:
         while True:
             temp = input(item.inputLabel)
-            if item.verifyData == verification_type.BANCHO:
+            if item.verifyData == VerificationType.BANCHO:
                 if len(temp) < 40:
                     continue
                 bancho_api.API_KEY = temp
@@ -68,7 +67,7 @@ def get_config_data(temp_config):
                     print("Bancho api key is invalid.")
                     continue
                 break
-            if item.verifyData == verification_type.CHALLONGE_KEY:
+            if item.verifyData == VerificationType.CHALLONGE_KEY:
                 if temp == "":
                     break
                 challonge_api.APIKEY = temp
@@ -78,7 +77,7 @@ def get_config_data(temp_config):
                     continue
                 is_challonge_key_valid = True
                 break
-            if item.verifyData == verification_type.CHALLONGE_USERNAME:
+            if item.verifyData == VerificationType.CHALLONGE_USERNAME:
                 if not is_challonge_key_valid:
                     break
                 try:

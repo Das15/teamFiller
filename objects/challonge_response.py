@@ -7,13 +7,13 @@ ALPHABET_LENGTH = 26
 
 
 def get_match_id(identifier):
-    id = 0
+    match_id = 0
     exponential = 0
     for i in reversed(range(len(identifier))):
         position_of_letter = ord(identifier[i]) - 64
-        id += (ALPHABET_LENGTH ** exponential) * position_of_letter
+        match_id += (ALPHABET_LENGTH ** exponential) * position_of_letter
         exponential += 1
-    return id
+    return match_id
 
 
 def assign_scores(match_data, scores):

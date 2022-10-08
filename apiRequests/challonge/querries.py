@@ -1,4 +1,5 @@
 import logging
+# TODO: Remove this module from application
 import challonge
 import apiRequests.challonge.cache as cache
 import config

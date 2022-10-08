@@ -37,10 +37,11 @@ class Class(object):
     def __init__(self, body):
         self._body = body
 
-    def get_player_name(self, player_id):
+    def get_team_name(self, team_id):
         for player in self.body["participants"]:
-            if player["id"] == player_id:
-                return player["name"]
+            temp = player["participant"]
+            if temp["id"] == team_id:
+                return temp["name"]
         return None
 
     @property
@@ -50,12 +51,12 @@ class Class(object):
     def replace_acronyms(self, bracket_data: bracket.Class):
         ladder_data = ladder.Class(bracket_data)
         for i in range(len(self.body["matches"])):
-            challonge_match = self.body["matches"][i]
+            challonge_match = self.body["matches"][i]["match"]
             try:
                 if challonge_match["player1_id"] is None or challonge_match["player2_id"] is None:
                     continue
-                team_names = [self.get_player_name(challonge_match["player1_id"]),
-                              self.get_player_name((challonge_match["player2_id"]))]
+                team_names = [self.get_team_name(challonge_match["player1_id"]),
+                              self.get_team_name((challonge_match["player2_id"]))]
                 acronyms = [bracket_data.get_acronym_from_name(team_names[0]),
                             bracket_data.get_acronym_from_name(team_names[1])]
                 match_id = get_match_id(challonge_match["identifier"])

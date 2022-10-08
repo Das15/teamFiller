@@ -68,7 +68,7 @@ def execute_functions(answers, bracket_data=None):
         bracket_data = fill_ladder(bracket_data)
     if "Teams" in answers:
         bracket_data = fill_teams(bracket_data)
-    bracket_data.writeToFile(bracket_path)
+    bracket_data.write_to_file(bracket_path)
 
 
 def backup_bracket_file(bracket_data, bracket_path):

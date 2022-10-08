@@ -20,6 +20,7 @@ Loads api key and username from config file.
 
 
 # Does not have time.sleep, use it cautiously
+# TODO: Remove the redundant "participant" and "match" subdirectories in json response.
 def request_tournament(tourney_name, get_participants_and_matches=True):
     data = {"api_key": API_KEY, "include_participants": 0, "include_matches": 0}
     if get_participants_and_matches:
@@ -28,7 +29,7 @@ def request_tournament(tourney_name, get_participants_and_matches=True):
     logging.info(f"Getting challonge bracket for tournament '{tourney_name}'.")
     re = requests.get(f"https://api.challonge.com/v1/tournaments/{tourney_name}.json", data, headers=DEFAULT_HEADERS)
     if re.status_code == 200:
-        return re.json()[0]
+        return re.json()["tournament"]
     logging.error(f"Requesting tournament failed, response code: '{re.status_code}'")
 
 

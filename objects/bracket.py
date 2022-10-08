@@ -10,7 +10,8 @@ import jsonpickle as jp
 
 class Class(object):
     # noinspection PyPep8Naming
-    def __init__(self, Ruleset, Matches, Rounds, Teams, Progressions, ChromaKeyWidth, PlayersPerTeam):
+    def __init__(self, Ruleset: ruleset, Matches: match, Rounds: [], Teams: [], Progressions: [], ChromaKeyWidth: int,
+                 PlayersPerTeam: int, AutoProgressScreens: bool):
         temp = []
         self.Ruleset = ruleset.Class(**Ruleset)
         for Match in Matches:
@@ -28,6 +29,7 @@ class Class(object):
         self.Progressions = Progressions
         self.ChromaKeyWidth = ChromaKeyWidth
         self.PlayersPerTeam = PlayersPerTeam
+        self.AutoProgressScreens = AutoProgressScreens
 
     def get_acronym_from_name(self, team_name):
         for i in range(len(self.Teams)):

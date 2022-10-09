@@ -9,3 +9,4 @@ teams.txt
 /dist
 /.idea
 main.spec
+__pycache__/

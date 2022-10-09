@@ -97,8 +97,8 @@ def initialize_ui():
     try:
         answers = inquirer.prompt(questions)["options"]
     except TypeError:
-        logging.info("User cancelled selection, closing the script.")
+        logging.debug("User cancelled selection, closing the script.")
         exit(0)
 
-    logging.info(f"Selected options in ui: {str(answers)}")
+    logging.debug(f"Selected options in ui: {str(answers)}")
     execute_functions(answers)

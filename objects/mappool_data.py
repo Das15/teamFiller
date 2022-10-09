@@ -16,10 +16,8 @@ def extract_mappool_names(bracket_mappools: list[mappool.Class]) -> list[str]:
 
 # noinspection PyPep8Naming
 class Class(object):
-    # TODO: Refactor this class
     def __init__(self, bracketMappools: list[mappool.Class], modsFilename: str = "mods.txt",
                  mappoolFilename: str = "mappool.txt"):
-        self.current_round = 0
         self.bracket_mappools = bracketMappools
         mods = load_raw_data(modsFilename)
         self.mods = []
@@ -29,37 +27,50 @@ class Class(object):
 
     def get_mappool(self):
         if self.mapEntries:
-            self.bracket_mappools[self.current_round].Beatmaps = self.fetch_maps()
+            self.fetch_maps()
         else:
-            logging.error(f"Expected non null value at mapEntries, instead got null.")
+            logging.fatal(f"Expected entries from file, got none.")
+            exit(-1)
 
     def fetch_maps(self):
         maps = []
+        curr_round_iterator = 0
         for entry in self.mapEntries:
-            mod = entry[0][0:-1]
-            if mod not in self.mods:
-                self.write_maps_to_mappool(entry, maps)
+            name = entry[0][0:-1]
+            if name not in self.mods:
+                if entry[0] in self.mods:
+                    maps.append(beatmap.Class(int(entry[1]), entry[0]))
+                    continue
+                logging.debug(f"'{entry[0][0:-1]}' isn't in mods.csv")
+                if entry == self.mapEntries[0]:
+                    logging.debug("Skipping first entry from mappool file.")
+                    continue
+
+                curr_mappool = self.bracket_mappools[curr_round_iterator]
+                logged_name = curr_mappool.Description if curr_mappool.Name == "" else curr_mappool.Name
+                logging.debug(f"Writing beatmaps to '{logged_name}'")
+                self.bracket_mappools[curr_round_iterator].Beatmaps = maps
+
+                curr_round_iterator = self.change_current_mappool(curr_round_iterator, entry[0])
                 maps = []
             else:
                 maps.append(beatmap.Class(int(entry[1]), entry[0][0:-1]))
-        return maps
+        self.bracket_mappools[curr_round_iterator].Beatmaps = maps
 
-    def write_maps_to_mappool(self, entry, maps):
-        logging.debug(f"'{entry[0][0:-1]}' isn't in mods.csv")
-        if entry != self.mapEntries[0]:
-            logging.debug("Writing beatmaps to round '{}'".format(self.bracket_mappools[self.current_round].Name))
-            self.bracket_mappools[self.current_round].Beatmaps = maps
-        self.check_if_mappool_name_exists(entry[0])
-
-# TODO: Make this non WTF'y
-    def check_if_mappool_name_exists(self, name):
-        round_names = extract_mappool_names(self.bracket_mappools)
-        for i in range(len(round_names)):
-            if name.lower() == round_names[i]:
+    def change_current_mappool(self, curr_round_iterator: int, name: str) -> int:
+        name_exists = False
+        bracket_round_names = extract_mappool_names(self.bracket_mappools)
+        for i, current_round_name in enumerate(bracket_round_names):
+            if name.lower() == current_round_name:
                 logging.debug(f"Found '{name}' in rounds.")
-                self.current_round = i
-                return
-        logging.warning(f"Didn't find '{name}' in rounds.")
-        self.bracket_mappools.append(mappool.Class(name))
-        self.current_round = len(self.bracket_mappools) - 1
-        assert self.current_round >= 0
+                curr_round_iterator = i
+                name_exists = True
+                break
+        if not name_exists:
+            logging.warning(f"Didn't find '{name}' in rounds.")
+
+            self.bracket_mappools.append(mappool.Class(name[0]))
+            curr_round_iterator = len(self.bracket_mappools) - 1
+
+            assert curr_round_iterator >= 0
+        return curr_round_iterator

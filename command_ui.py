@@ -45,6 +45,9 @@ def get_file_path(default_dir=None, window_title="Open", opened_file_on_fail=Non
         path = dialog.GetPath()
     else:
         if opened_file_on_fail:
+            if not os.path.exists(opened_file_on_fail):
+                with open(opened_file_on_fail, "w"):
+                    pass
             os.startfile(opened_file_on_fail)
             input("Press enter when done editing the file.")
             return opened_file_on_fail

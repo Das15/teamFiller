@@ -2,7 +2,7 @@ import logging
 import os
 
 
-def parse_cache(cache):
+def parse_cache(cache: []):
     temp = []
     for i in range(len(cache)):
         cache[i] = cache[i].replace("\n", "")
@@ -13,7 +13,7 @@ def parse_cache(cache):
     return temp
 
 
-def read_cache(cache_path):
+def read_cache(cache_path: str):
     if not os.path.exists(cache_path):
         return None
     with open(cache_path, "r") as file:

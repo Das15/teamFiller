@@ -15,7 +15,7 @@ def initialize():
     API_KEY = config.get_config_value("bancho_api_key")
 
 
-def request_user_id(username):
+def request_user_id(username: str):
     data = {"k": API_KEY, "u": username, "type": "string"}
     logging.info(f"Getting user_id for username '{username}'.")
 
@@ -33,7 +33,7 @@ def request_user_id(username):
     return user_id
 
 
-def check_if_user_id_exists(user_id):
+def check_if_user_id_exists(user_id: str):
     if cache.check_user_id(user_id):
         return True
     data = {"k": API_KEY, "u": user_id, "type": "id"}
@@ -46,7 +46,7 @@ def check_if_user_id_exists(user_id):
         return False
 
 
-def get_user_id(username):
+def get_user_id(username: str):
     cache_check_result = cache.check_username(username)
     if cache_check_result:
         return cache_check_result

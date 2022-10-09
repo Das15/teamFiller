@@ -4,7 +4,7 @@ import objects.beatmap as beatmap
 from objects.data import load_raw_data
 
 
-def extract_mappool_names(bracket_mappools):
+def extract_mappool_names(bracket_mappools: list[mappool.Class]) -> list[str]:
     mappool_names = []
     for entry in bracket_mappools:
         if entry.Name == "":
@@ -17,7 +17,8 @@ def extract_mappool_names(bracket_mappools):
 # noinspection PyPep8Naming
 class Class(object):
     # TODO: Refactor this class
-    def __init__(self, bracketMappools, modsFilename="mods.txt", mappoolFilename="mappool.txt"):
+    def __init__(self, bracketMappools: list[mappool.Class], modsFilename: str = "mods.txt",
+                 mappoolFilename: str = "mappool.txt"):
         self.current_round = 0
         self.bracket_mappools = bracketMappools
         mods = load_raw_data(modsFilename)
@@ -30,7 +31,7 @@ class Class(object):
         if self.mapEntries:
             self.bracket_mappools[self.current_round].Beatmaps = self.fetch_maps()
         else:
-            logging.error(f"General mappool reading error: {self.mapEntries}")
+            logging.error(f"Expected non null value at mapEntries, instead got null.")
 
     def fetch_maps(self):
         maps = []
@@ -55,10 +56,10 @@ class Class(object):
         round_names = extract_mappool_names(self.bracket_mappools)
         for i in range(len(round_names)):
             if name.lower() == round_names[i]:
-                logging.debug(f"Found '{name}' in Rounds")
+                logging.debug(f"Found '{name}' in rounds.")
                 self.current_round = i
                 return
-        logging.warning(f"Didn't find '{name}' in Rounds")
+        logging.warning(f"Didn't find '{name}' in rounds.")
         self.bracket_mappools.append(mappool.Class(name))
         self.current_round = len(self.bracket_mappools) - 1
         assert self.current_round >= 0

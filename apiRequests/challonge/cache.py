@@ -7,7 +7,7 @@ import time
 CACHE_PATH = os.path.join(os.getcwd(), "data", "challonge_cache")
 
 
-def add_entry_to_cache(request_data) -> None:
+def add_entry_to_cache(request_data: {}) -> None:
     if not os.path.exists(CACHE_PATH):
         os.makedirs(CACHE_PATH)
     with open(os.path.join(CACHE_PATH, f'{request_data["url"].lower()}.json'), "w", encoding="utf-8") \

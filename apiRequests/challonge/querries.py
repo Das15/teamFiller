@@ -1,6 +1,4 @@
 import logging
-# TODO: Remove this module from application
-import challonge
 import apiRequests.challonge.cache as cache
 import config
 import requests
@@ -21,7 +19,7 @@ Loads api key and username from config file.
 
 # Does not have time.sleep, use it cautiously
 # TODO: Remove the redundant "participant" and "match" subdirectories in json response.
-def request_tournament(tourney_name, get_participants_and_matches=True):
+def request_tournament(tourney_name: str, get_participants_and_matches: bool = True):
     data = {"api_key": API_KEY, "include_participants": 0, "include_matches": 0}
     if get_participants_and_matches:
         data["include_participants"] = 1
@@ -33,7 +31,7 @@ def request_tournament(tourney_name, get_participants_and_matches=True):
     logging.error(f"Requesting tournament failed, response code: '{re.status_code}'")
 
 
-def check_challonge_key(challonge_api_key):
+def check_challonge_key(challonge_api_key: str):
     data = {"api_key": challonge_api_key, "include_participants": 0, "include_matches": 0}
     logging.info(f"Checking if '{challonge_api_key}' challonge key is valid.")
 
@@ -44,7 +42,7 @@ def check_challonge_key(challonge_api_key):
     return False
 
 
-def get_tournament(tourney_name):
+def get_tournament(tourney_name: str):
     cache_check_result = cache.read_cache(tourney_name)
     if cache_check_result:
         return cache_check_result

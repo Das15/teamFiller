@@ -1,12 +1,13 @@
 import objects.bracket as bracket
 import objects.ladder as ladder
+import objects.match as match
 import logging
 
 
 ALPHABET_LENGTH = 26
 
 
-def get_match_id(identifier):
+def get_match_id(identifier: str):
     match_id = 0
     exponential = 0
     for i in reversed(range(len(identifier))):
@@ -16,7 +17,7 @@ def get_match_id(identifier):
     return match_id
 
 
-def assign_scores(match_data, scores):
+def assign_scores(match_data: match.Class, scores: []):
     if scores[0] != "" and scores[1] != "":
         if scores[1] == "-1":
             match_data.Team1Score = match_data.PointsToWin

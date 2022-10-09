@@ -31,7 +31,7 @@ class Class(object):
         self.PlayersPerTeam = PlayersPerTeam
         self.AutoProgressScreens = AutoProgressScreens
 
-    def get_acronym_from_name(self, team_name):
+    def get_acronym_from_name(self, team_name: str):
         for i in range(len(self.Teams)):
             if team_name == self.Teams[i].FullName:
                 return self.Teams[i].Acronym
@@ -44,7 +44,7 @@ class Class(object):
                 return True
         return False
 
-    def get_match_id(self, acronyms, case_insensitive=True):
+    def get_match_id(self, acronyms: [], case_insensitive: bool = True):
         for i in range(len(self.Matches)):
             if case_insensitive:
                 match_acronyms = [self.Matches[i].Team1Acronym.lower(), self.Matches[i].Team2Acronym.lower()]
@@ -55,7 +55,7 @@ class Class(object):
         return None
 
 # Using jsonpickle to avoid json encoding issues, like crashes on datatime (no clue what this means exactly, huh)
-    def write_to_file(self, file_path):
+    def write_to_file(self, file_path: str):
         if file_path is None:
             file_path = "output.json"
         jp.set_encoder_options("json", indent=2)
@@ -63,7 +63,7 @@ class Class(object):
             file.write(jp.encode(self, unpicklable=False))
 
 
-def load_json(filename):
+def load_json(filename: str):
     try:
         with codecs.open(filename, "r", encoding="utf-8") as file:
             logging.info("Loading json bracket from 'bracket.json'")

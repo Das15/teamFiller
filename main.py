@@ -1,10 +1,10 @@
 from importlib import reload
-from apiRequests.general import initialize_api_keys
+import logging
 
+from apiRequests.general import initialize_api_keys
 import command_ui
 import objects.bracket as bracket
 import objects.teams_data as teams_data
-import logging
 import objects.mappool_data as mappool_data
 import objects.challonge_response as challonge_response
 import apiRequests.challonge.querries as challonge_request

@@ -1,13 +1,14 @@
+import logging
+
 import objects.bracket as bracket
 import objects.ladder as ladder
 import objects.match as match
-import logging
 
 
 ALPHABET_LENGTH = 26
 
 
-def get_match_id(identifier: str):
+def get_match_id(identifier: str) -> int:
     match_id = 0
     exponential = 0
     for i in reversed(range(len(identifier))):
@@ -17,7 +18,7 @@ def get_match_id(identifier: str):
     return match_id
 
 
-def assign_scores(match_data: match.Class, scores: []):
+def assign_scores(match_data: match.Class, scores: []) -> match.Class:
     if scores[0] != "" and scores[1] != "":
         if scores[1] == "-1":
             match_data.Team1Score = match_data.PointsToWin
@@ -49,7 +50,7 @@ class Class(object):
     def body(self):
         return self._body
 
-    def replace_acronyms(self, bracket_data: bracket.Class):
+    def replace_acronyms(self, bracket_data: bracket.Class) -> bracket.Class:
         ladder_data = ladder.Class(bracket_data)
         for i in range(len(self.body["matches"])):
             challonge_match = self.body["matches"][i]["match"]

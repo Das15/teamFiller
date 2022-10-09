@@ -1,4 +1,4 @@
-# TODO: Refactor this function
+# TODO: Refactor this function, it's a mess, I know
 
 def get_match_from_fourth_round(ladder_obj, match_index, middle_index, pool_length):
     if match_index >= middle_index / 2:

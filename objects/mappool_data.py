@@ -1,4 +1,5 @@
 import logging
+
 import objects.mappool as mappool
 import objects.beatmap as beatmap
 from objects.data import load_raw_data

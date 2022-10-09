@@ -1,10 +1,11 @@
 import os
+
 import apiRequests.cache as base_cache
 
 CACHE_PATH = os.path.join(os.getcwd(), "data", "bancho_cache")
 
 
-def add_entry_to_cache(username: str, user_id: str):
+def add_entry_to_cache(username: str, user_id: str) -> None:
     with open(CACHE_PATH, "a") as file:
         file.write(f"{username}\t{user_id}\n")
 

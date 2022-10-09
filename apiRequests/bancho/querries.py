@@ -1,6 +1,7 @@
 import logging
 import time
 import requests
+
 import apiRequests.bancho.cache as cache
 import config
 
@@ -15,7 +16,7 @@ def initialize():
     API_KEY = config.get_config_value("bancho_api_key")
 
 
-def request_user_id(username: str):
+def request_user_id(username: str) -> str:
     data = {"k": API_KEY, "u": username, "type": "string"}
     logging.info(f"Getting user_id for username '{username}'.")
 
@@ -33,7 +34,7 @@ def request_user_id(username: str):
     return user_id
 
 
-def check_if_user_id_exists(user_id: str):
+def check_if_user_id_exists(user_id: str) -> bool:
     if cache.check_user_id(user_id):
         return True
     data = {"k": API_KEY, "u": user_id, "type": "id"}
@@ -46,7 +47,7 @@ def check_if_user_id_exists(user_id: str):
         return False
 
 
-def get_user_id(username: str):
+def get_user_id(username: str) -> str:
     cache_check_result = cache.check_username(username)
     if cache_check_result:
         return cache_check_result

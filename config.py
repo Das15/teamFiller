@@ -57,7 +57,7 @@ def get_and_verify_config_data(temp_config):
                 if len(temp) < 40:
                     continue
                 bancho_api.API_KEY = temp
-                check_result = bancho_api.check_if_user_id_exists(2)
+                check_result = bancho_api.check_if_user_id_exists("2")
                 if not check_result:
                     print("Bancho api key is invalid.")
                     continue

@@ -1,5 +1,6 @@
-import objects.beatmap as beatmap
 import datetime
+
+import objects.beatmap as beatmap
 
 
 class Class(object):
@@ -13,8 +14,8 @@ class Class(object):
         return hash(self.__key())
 
     # noinspection PyPep8Naming
-    def __init__(self, Name, Description=None, BestOf=9, Beatmaps=None, StartDate=datetime.datetime.now(),
-                 Matches=None):
+    def __init__(self, Name, Description: str = None, BestOf: int = 9, Beatmaps: list[dict] = None,
+                 StartDate: str = datetime.datetime.now(), Matches=None):
         if Matches is None:
             Matches = []
         if Beatmaps is None:

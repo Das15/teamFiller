@@ -1,25 +1,24 @@
+from dataclasses import dataclass
+from typing import Any
+
+
+@dataclass
 class Class(object):
-    # noinspection PyPep8Naming
-    def __init__(self, ID, Team1Acronym=None, Team1Score=None, Team2Acronym=None, Team2Score=None, Completed=None,
-                 Losers=None, PicksBans=None, Current=None, Date=None, ConditionalMatches=None, Position=None,
-                 Acronyms=None, WinnerColour=None, PointsToWin=None):
-        if PicksBans is None:
-            PicksBans = []
-        self.ID = ID
-        self.Team1Acronym = Team1Acronym
-        self.Team1Score = Team1Score
-        self.Team2Acronym = Team2Acronym
-        self.Team2Score = Team2Score
-        self.Completed = Completed
-        self.Losers = Losers
-        self.PicksBans = PicksBans
-        self.Current = Current
-        self.Date = Date
-        self.ConditionalMatches = ConditionalMatches
-        self.Position = Position
-        self.Acronyms = Acronyms
-        self.WinnerColour = WinnerColour
-        self.PointsToWin = PointsToWin
+    ID: int
+    Team1Acronym: str = None
+    Team1Score: int = None
+    Team2Acronym: str = None
+    Team2Score: int = None
+    Completed: bool = None
+    Losers: bool = None
+    PicksBans: [] = list[Any]
+    Current: bool = None
+    Date: str = None
+    ConditionalMatches: [] = list[Any]
+    Position: {} = dict[Any]
+    Acronyms: [] = list[Any]
+    WinnerColour: str = None
+    PointsToWin: int = None
 
     def replace_acronyms(self, new_acronyms: []):
         self.Team1Acronym = new_acronyms[0]

@@ -1,5 +1,6 @@
-import objects.beatmap_info as beatmap_info
 import logging
+
+import objects.beatmap_info as beatmap_info
 
 
 # noinspection PyPep8Naming
@@ -13,7 +14,7 @@ class Class(object):
     def __eq__(self, obj):
         return self.ID == obj.ID and self.Mods == obj.Mods
 
-    def __init__(self, ID: int, Mods: str, BeatmapInfo=None):
+    def __init__(self, ID: int, Mods: str, BeatmapInfo: dict = None):
         self.ID = ID
         self.Mods = Mods
         if BeatmapInfo != {}:
@@ -22,9 +23,14 @@ class Class(object):
             else:
                 try:
                     if BeatmapInfo["Metadata"] is not None:
-                        if BeatmapInfo["OnlineID"] is not None:
+                        if BeatmapInfo["Metadata"] is not None:
                             self.BeatmapInfo = beatmap_info.Class(**BeatmapInfo)
-                except AttributeError:
+                except AttributeError as e:
                     logging.error(f"Didn't found id {ID} in BeatmapInfo.")
                 except TypeError:
                     logging.error(f"Wrong BeatmapInfo found in {ID} OR someone changed json key names again.")
+
+    def __iter__(self):
+        yield "ID", self.ID
+        yield "Mods", self.Mods
+        yield "BeatmapInfo", self.BeatmapInfo

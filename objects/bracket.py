@@ -1,17 +1,18 @@
 import json
 import logging
 import codecs
+import jsonpickle as jp
+
 import objects.team as team
 import objects.match as match
 import objects.mappool as mappool
 import objects.ruleset as ruleset
-import jsonpickle as jp
 
 
 class Class(object):
     # noinspection PyPep8Naming
-    def __init__(self, Ruleset: ruleset, Matches: match, Rounds: [], Teams: [], Progressions: [], ChromaKeyWidth: int,
-                 PlayersPerTeam: int, AutoProgressScreens: bool):
+    def __init__(self, Ruleset: ruleset, Matches: match, Rounds: list[dict], Teams: list[dict], Progressions: [],
+                 ChromaKeyWidth: int, PlayersPerTeam: int, AutoProgressScreens: bool):
         temp = []
         self.Ruleset = ruleset.Class(**Ruleset)
         for Match in Matches:
@@ -31,20 +32,20 @@ class Class(object):
         self.PlayersPerTeam = PlayersPerTeam
         self.AutoProgressScreens = AutoProgressScreens
 
-    def get_acronym_from_name(self, team_name: str):
+    def get_acronym_from_name(self, team_name: str) -> str | None:
         for i in range(len(self.Teams)):
             if team_name == self.Teams[i].FullName:
                 return self.Teams[i].Acronym
         return None
 
-    def replace_match(self, match_data: match.Class):
+    def replace_match(self, match_data: match.Class) -> bool:
         for i in range(len(self.Matches)):
             if match_data.ID == self.Matches[i].ID:
                 self.Matches[i] = match_data
                 return True
         return False
 
-    def get_match_id(self, acronyms: [], case_insensitive: bool = True):
+    def get_match_id(self, acronyms: [], case_insensitive: bool = True) -> int | None:
         for i in range(len(self.Matches)):
             if case_insensitive:
                 match_acronyms = [self.Matches[i].Team1Acronym.lower(), self.Matches[i].Team2Acronym.lower()]
@@ -55,7 +56,7 @@ class Class(object):
         return None
 
 # Using jsonpickle to avoid json encoding issues, like crashes on datatime (no clue what this means exactly, huh)
-    def write_to_file(self, file_path: str):
+    def write_to_file(self, file_path: str) -> None:
         if file_path is None:
             file_path = "output.json"
         jp.set_encoder_options("json", indent=2)
@@ -63,11 +64,11 @@ class Class(object):
             file.write(jp.encode(self, unpicklable=False))
 
 
-def load_json(filename: str):
+def load_json(filename: str) -> Class:
     try:
         with codecs.open(filename, "r", encoding="utf-8") as file:
             logging.info("Loading json bracket from 'bracket.json'")
             return Class(**json.loads(file.read()))
     except FileNotFoundError:
         logging.error("Didn't find {}".format(filename))
-        exit(2)
+        exit(-1)

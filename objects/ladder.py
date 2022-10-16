@@ -39,14 +39,6 @@ class Class(object):
         self.roundNames = extract_round_names(bracket_data.Rounds)
         self.ladder = scan_matches(bracket_data, self.roundNames)
 
-    # TODO: Remove or use this function
-    def get_matches(self):
-        matches = []
-        for mappoolRound in self.ladder:
-            for entry in mappoolRound:
-                matches.append(entry)
-        return matches
-
     # TODO: Make function just a bit more readable
     def get_match_from_identifier(self, challonge_match_id: int) -> match.Class | None:
         amount_of_winner_matches = len(self.ladder[0]) * 2
@@ -56,13 +48,13 @@ class Class(object):
 
         for matches in self.ladder:
             total_amount_of_passed_matches += len(matches)
-
-            if challonge_match_id <= amount_of_winner_matches:  # Winner's bracket
+            # Winner's bracket
+            if challonge_match_id <= amount_of_winner_matches:
                 if challonge_match_id <= max_round_match_id + amount_of_passed_winner_matches:
                     match_id = challonge_match_id - amount_of_passed_winner_matches
                     return matches[match_id - 1]
-
-            else:  # Loser's bracket
+            # Loser's bracket
+            else:
                 if matches is self.ladder[1]:
                     if challonge_match_id <= total_amount_of_passed_matches + len(matches) / 2 + 1:
                         match_id = challonge_match_id - amount_of_winner_matches + int(len(matches) / 2) - 2

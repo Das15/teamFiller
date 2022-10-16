@@ -27,7 +27,7 @@ def extract_acronyms(teams):
 
 
 # TODO: Extract acronym matching funtion so it can be accessed from other files
-def verify_acronyms(teams):
+def check_for_duplicated_entries(teams):
     acronyms = extract_acronyms(teams)
     duplicated_entries = []
     for i in range(len(teams)):
@@ -77,7 +77,7 @@ def parse_raw_data(data):
 
 
 def parse_acronyms(teams):
-    duplicated_entries = verify_acronyms(teams)
+    duplicated_entries = check_for_duplicated_entries(teams)
     for entry in duplicated_entries:
         old_acronym = teams[entry[1]].Acronym
         teams[entry[1]].parse_acronym(4)

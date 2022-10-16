@@ -22,6 +22,8 @@ def get_match_from_fifth_round(ladder_obj, match_index, middle_index, pool_lengt
 
 
 # Leaving this just in case something changes on challonge API side and I'll have to scan matches using suggested order
+# Also i have no clue on what i wrote here, since it works i assume it's fine.
+# TODO: refactor it or something, idk
 def get_match_from_suggested_order(ladder_obj, challonge_match_id: int):
     internal_match_id = challonge_match_id - 1
     pool_length = len(ladder_obj.ladder[0])

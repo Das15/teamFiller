@@ -72,7 +72,8 @@ def execute_functions(answers: list[str], bracket_data: bracket.Class = None):
     if "Ladder" in answers:
         bracket_data = fill_ladder(bracket_data)
     if "Teams" in answers:
-        bracket_data = fill_teams(bracket_data)
+        do_seeding_by_order = inquirer.confirm("Do you want to use seeding based on team order?", default=True)
+        bracket_data = fill_teams(bracket_data, do_seeding_by_order)
     bracket_data.write_to_file(bracket_path)
 
 

@@ -1,6 +1,9 @@
-# TODO: Refactor this function, it's a mess, I know
+import objects.match as match
 
-def get_match_from_fourth_round(ladder_obj, match_index, middle_index, pool_length):
+# TODO: Refactor this file, it's a mess, I know
+
+
+def get_match_from_fourth_round(ladder_obj, match_index, middle_index, pool_length) -> match.Class:
     if match_index >= middle_index / 2:
         return ladder_obj.ladder[3][match_index]
     if match_index >= 0:
@@ -10,7 +13,7 @@ def get_match_from_fourth_round(ladder_obj, match_index, middle_index, pool_leng
     return ladder_obj.ladder[3][match_index + int(pool_length / 2)]
 
 
-def get_match_from_fifth_round(ladder_obj, match_index, middle_index, pool_length):
+def get_match_from_fifth_round(ladder_obj, match_index, middle_index, pool_length) -> match.Class:
     if match_index < -pool_length:
         return ladder_obj.ladder[4][match_index]
     if -pool_length <= match_index < 0:
@@ -24,7 +27,7 @@ def get_match_from_fifth_round(ladder_obj, match_index, middle_index, pool_lengt
 # Leaving this just in case something changes on challonge API side and I'll have to scan matches using suggested order
 # Also i have no clue on what i wrote here, since it works i assume it's fine.
 # TODO: refactor it or something, idk
-def get_match_from_suggested_order(ladder_obj, challonge_match_id: int):
+def get_match_from_suggested_order(ladder_obj, challonge_match_id: int) -> match.Class | None:
     internal_match_id = challonge_match_id - 1
     pool_length = len(ladder_obj.ladder[0])
     i = 0

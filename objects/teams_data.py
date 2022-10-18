@@ -32,11 +32,11 @@ def check_for_duplicated_entries(teams):
     duplicated_entries = []
     for i in range(len(teams)):
         if teams[i].Acronym in acronyms:
-            tempArray = acronyms.copy()
-            tempArray.remove(teams[i].Acronym)
-            if teams[i].Acronym in tempArray:
+            temp_array = acronyms.copy()
+            temp_array.remove(teams[i].Acronym)
+            if teams[i].Acronym in temp_array:
                 if acronyms.index(teams[i].Acronym) == i:
-                    temp = [tempArray.index(teams[i].Acronym), i]
+                    temp = [temp_array.index(teams[i].Acronym), i]
                     duplicated_entries.append([min(temp), max(temp)+1])
     return duplicated_entries
 
@@ -47,8 +47,8 @@ def parse_player_id(raw_player_id):
     if raw_player_id.isdigit() and check_if_user_id_exists(raw_player_id):
         return raw_player_id
     else:
-        playerId = get_user_id(raw_player_id)
-        return playerId
+        player_id = get_user_id(raw_player_id)
+        return player_id
 
 
 def parse_raw_data(data):

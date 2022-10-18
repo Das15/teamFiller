@@ -2,7 +2,7 @@ import codecs
 import logging
 
 
-def parse_entry(entry: str):
+def parse_entry(entry: str) -> list[str]:
     temp = []
     data_list = entry.split("\t")
     for data in data_list:

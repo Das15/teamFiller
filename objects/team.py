@@ -1,12 +1,6 @@
 import re
 
 
-# Possible repeat of class's method?
-def parse_acronym(team_name, length=3):
-    stripped_team_name = remove_non_ascii_chars(team_name.FullName).replace(" ", "")
-    team_name.Acronym = stripped_team_name[0:length] if len(stripped_team_name) >= length else stripped_team_name
-
-
 class Class(object):
     # noinspection PyPep8Naming
     def __init__(self, FullName, Seed=None, FlagName=None, Acronym=None, SeedingResults=None, LastYearPlacing=0,

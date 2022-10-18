@@ -17,6 +17,7 @@ def initialize():
 
 
 def request_user_id(username: str) -> str:
+    """Requests user_id from bancho, if it doesn't receive json data, returns None. Has time.sleep built in."""
     data = {"k": API_KEY, "u": username, "type": "string"}
     logging.info(f"Getting user_id for username '{username}'.")
 
@@ -35,6 +36,7 @@ def request_user_id(username: str) -> str:
 
 
 def check_if_user_id_exists(user_id: str) -> bool:
+    """Checks if user_id exists on bancho, returning True or False"""
     if cache.check_user_id(user_id):
         return True
     data = {"k": API_KEY, "u": user_id, "type": "id"}
@@ -48,6 +50,7 @@ def check_if_user_id_exists(user_id: str) -> bool:
 
 
 def get_user_id(username: str) -> str:
+    """Gets user_id from cache first, then if it doesn't exist, from bancho, after which it will cache it."""
     cache_check_result = cache.check_username(username)
     if cache_check_result:
         return cache_check_result

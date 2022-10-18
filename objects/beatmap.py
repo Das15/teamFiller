@@ -14,7 +14,7 @@ class Class(object):
     def __eq__(self, obj):
         return self.ID == obj.ID and self.Mods == obj.Mods
 
-    def __init__(self, ID: int, Mods: str, BeatmapInfo: dict = None):
+    def __init__(self, ID: int, Mods: str, BeatmapInfo: dict = None) -> None:
         self.ID = ID
         self.Mods = Mods
         if BeatmapInfo != {}:

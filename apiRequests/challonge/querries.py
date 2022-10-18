@@ -19,7 +19,6 @@ Loads api key and username from config file.
 
 
 # Does not have time.sleep, use it cautiously
-# TODO: Remove the redundant "participant" and "match" subdirectories in json response.
 def request_tournament(tourney_name: str, get_participants_and_matches: bool = True) -> dict:
     data = {"api_key": API_KEY, "include_participants": 0, "include_matches": 0}
     if get_participants_and_matches:
@@ -28,7 +27,11 @@ def request_tournament(tourney_name: str, get_participants_and_matches: bool = T
     logging.info(f"Getting challonge bracket for tournament '{tourney_name}'.")
     re = requests.get(f"https://api.challonge.com/v1/tournaments/{tourney_name}.json", data, headers=DEFAULT_HEADERS)
     if re.status_code == 200:
-        return re.json()["tournament"]
+        tourney = re.json()["tournament"]
+        # Stripping redundant steps to make accessing variables easier
+        tourney["participants"] = [var["participant"] for var in tourney["participants"]]
+        tourney["matches"] = [var["match"] for var in tourney["matches"]]
+        return tourney
     logging.error(f"Requesting tournament failed, response code: '{re.status_code}'")
 
 

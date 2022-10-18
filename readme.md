@@ -94,3 +94,9 @@ I dunno 	_Kasaezic	MyAimGenoKiller	Akagii	GreenKusa	tomatohung
 100% Illegal Team	flyond	RemIscute07	Nuit_	Tsukime	comm899
 TBD	Cittasnaf	CPU_Cartel	Filtrator	Kevorc
 ```
+
+## Running the source code.
+
+1. Download the source code (preferably through git tools).
+2. Run the `pip install -r requirements.txt` to download dependencies.
+3. Hope nothing breaks (and report bugs, please)!

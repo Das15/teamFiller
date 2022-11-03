@@ -44,6 +44,7 @@ class Class(object):
                     continue
                 logging.debug(f"'{entry[0][0:-1]}' isn't in mods.csv")
                 if entry == self.mapEntries[0]:
+                    curr_round_iterator = self.change_current_mappool(curr_round_iterator, entry[0])
                     logging.debug("Skipping first entry from mappool file.")
                     continue
 
@@ -70,7 +71,7 @@ class Class(object):
         if not name_exists:
             logging.warning(f"Didn't find '{name}' in rounds.")
 
-            self.bracket_mappools.append(mappool.Class(name[0]))
+            self.bracket_mappools.append(mappool.Class(name))
             curr_round_iterator = len(self.bracket_mappools) - 1
 
             assert curr_round_iterator >= 0

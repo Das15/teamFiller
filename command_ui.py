@@ -1,7 +1,8 @@
 import inquirer
 import os
-import wx
 import logging
+import sys
+from PySide6 import QtWidgets
 
 import objects.bracket as bracket
 import objects.mappool as mappool
@@ -9,6 +10,10 @@ import objects.mappool_data as mappool_data
 import objects.teams_data as teams_data
 import objects.challonge_response as challonge_response
 import apiRequests.challonge.querries as challonge_request
+
+
+# I love singletons, I really do, it's not like im being forced to make global variables or anything
+_filepath_app = None
 
 
 def fill_mappool(bracket_data: bracket.Class, mods_filepath: str = "mods.txt") -> list[mappool.Class]:
@@ -36,36 +41,39 @@ def fill_teams(bracket_data: bracket.Class, assume_order_by_seeds=True) -> brack
     return bracket_data
 
 
-# noinspection PyUnusedLocal
-def get_file_path(default_dir: str = None, window_title: str = "Open", opened_file_on_fail: str = None) -> str:
-    app = wx.App(None)
-    style = wx.FD_OPEN | wx.FD_FILE_MUST_EXIST
-    dialog = wx.FileDialog(None, window_title, style=style)
+def get_file_path(default_dir: str = None, window_title: str = "Open", opened_file_on_fail: str = None,
+                  allowed_formats: str = "Text files (*.txt *.csv)") -> str | None:
+    dialog = QtWidgets.QFileDialog(None)
+    dialog.setWindowTitle(window_title)
+    dialog.setFileMode(QtWidgets.QFileDialog.FileMode.ExistingFile)
+    dialog.setNameFilter(allowed_formats)
+
     if default_dir:
-        dialog.SetDirectory(default_dir)
-    if dialog.ShowModal() == wx.ID_OK:
-        path = dialog.GetPath()
-    else:
-        if opened_file_on_fail:
-            if not os.path.exists(opened_file_on_fail):
-                with open(opened_file_on_fail, "w"):
-                    pass
-            os.startfile(opened_file_on_fail)
-            input("Press enter when done editing the file.")
-            return opened_file_on_fail
-        path = None
-    dialog.Destroy()
-    return path
+        dialog.setDirectory(default_dir)
+
+    if dialog.exec():
+        return dialog.selectedFiles()[0]
+    if opened_file_on_fail:
+        if not os.path.exists(opened_file_on_fail):
+            with open(opened_file_on_fail, "w"):
+                pass
+        os.startfile(opened_file_on_fail)
+        input("Press enter when done editing the file.")
+        return opened_file_on_fail
+
+    dialog.destroy()
+    return str(None)
 
 
-def execute_functions(answers: list[str], bracket_data: bracket.Class = None):
+def execute_functions(answers: list[str]):
     bracket_path = None
-    if answers:
-        while bracket_path is None:
-            bracket_path = get_file_path(f"{os.getenv('APPDATA')}\\osu\\tournaments\\", "Open bracket file")
-        bracket_data = bracket.load_json(bracket_path)
-
-        backup_bracket_file(bracket_data, bracket_path)
+    if not answers:
+        return
+    while bracket_path is None:
+        bracket_path = get_file_path(f"{os.getenv('APPDATA')}/osu/tournaments/", "Open bracket file", None,
+                                     "Bracket file (*.json)")
+    bracket_data = bracket.load_json(bracket_path)
+    backup_bracket_file(bracket_data, bracket_path)
 
     if "Mappool" in answers:
         bracket_data.Rounds = fill_mappool(bracket_data)
@@ -78,7 +86,7 @@ def execute_functions(answers: list[str], bracket_data: bracket.Class = None):
 
 
 def backup_bracket_file(bracket_data: bracket.Class, bracket_path: str):
-    backup_path = "\\".join(bracket_path.split("\\")[:-1]) + "\\backup.json"
+    backup_path = "/".join(bracket_path.split("/")[:-1]) + "/backup.json"
     temp_path = backup_path
     i = 1
     while os.path.exists(temp_path):
@@ -90,6 +98,8 @@ def backup_bracket_file(bracket_data: bracket.Class, bracket_path: str):
 
 
 def initialize_ui():
+    global _filepath_app
+    _filepath_app = QtWidgets.QApplication(sys.argv)
     questions = [
         inquirer.Checkbox("options",
                           message="What parts of bracket file would you like to update?",

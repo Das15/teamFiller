@@ -62,7 +62,7 @@ def get_file_path(default_dir: str = None, window_title: str = "Open", opened_fi
         return opened_file_on_fail
 
     dialog.destroy()
-    return str(None)
+    return None
 
 
 def execute_functions(answers: list[str]):

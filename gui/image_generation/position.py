@@ -5,3 +5,6 @@ from dataclasses import dataclass
 class Position(object):
     X: int
     Y: int
+
+    def list(self):
+        return [self.X, self.Y]

@@ -1,6 +1,7 @@
 import objects.bracket as Bracket
 from gui.image_generation.match_box import MatchBox
 from gui.image_generation.position import Position
+from gui.image_generation.match_style import MatchStyle
 import math
 from PIL import Image, ImageDraw
 
@@ -9,7 +10,7 @@ def get_required_canvas_size(bracket) -> tuple[int, int]:
     max_x = max(bracket.Matches, key=lambda match: match.Position["X"]).Position["X"]
     max_y = max(bracket.Matches, key=lambda match: match.Position["Y"]).Position["Y"]
 
-    return math.ceil(max_x/300)*300, math.ceil(max_y/300)*300
+    return math.ceil(max_x / 300) * 300, math.ceil(max_y / 300) * 300
 
 
 def gen_empty_image(bracket):
@@ -23,6 +24,7 @@ class LadderImage(object):
         self.bracket = bracket
         self.image = gen_empty_image(self.bracket)
         self.canvas = ImageDraw.Draw(self.image)
+        self.style = MatchStyle()
         self.matches = self.parse_matches()
 
     def draw_matches(self):
@@ -33,13 +35,36 @@ class LadderImage(object):
         output = []
         for match in self.bracket.Matches:
             temp = MatchBox(Position(match.Position["X"], match.Position["Y"]), match.Team1Acronym,
-                            match.Team2Acronym, [match.Team1Score, match.Team2Score])
+                            match.Team2Acronym, [match.Team1Score, match.Team2Score], self.style)
             output.append(temp)
         return output
+
+    def draw_connections(self):
+        for progression in self.bracket.Progressions:
+            if "Losers" in progression:
+                continue
+            source_id_match = self.bracket.get_match_from_id(progression["SourceID"])
+            target_id_match = self.bracket.get_match_from_id(progression["TargetID"])
+
+            temp_pos = source_id_match.Position
+            beginning_point = [temp_pos["X"] + self.style.RectWidth + 5, temp_pos["Y"] + self.style.RectHeight]
+            first_line_coords = beginning_point + [beginning_point[0] + 10, beginning_point[1]]
+
+            self.canvas.line(first_line_coords, fill="black", width=1)
+
+            temp_pos = target_id_match.Position
+            second_line_coords = [first_line_coords[2], first_line_coords[3]] + \
+                                 [first_line_coords[2], temp_pos["Y"] + self.style.RectHeight]
+            self.canvas.line(second_line_coords, fill="black", width=1)
+
+            third_line_coords = [second_line_coords[2], second_line_coords[3]] + \
+                                [temp_pos["X"] - 5, second_line_coords[3]]
+            self.canvas.line(third_line_coords, fill="black", width=1)
 
 
 if __name__ == "__main__":
     BRACKET = Bracket.load_json("bracket.json")
     test = LadderImage(BRACKET)
     test.draw_matches()
+    test.draw_connections()
     test.image.show()

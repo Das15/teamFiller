@@ -45,6 +45,11 @@ class Class(object):
                 return True
         return False
 
+    def get_match_from_id(self, match_id: int) -> match.Class:
+        for temp_match in self.Matches:
+            if temp_match.ID == match_id:
+                return temp_match
+
     def get_match_id(self, acronyms: [], case_insensitive: bool = True) -> int | None:
         for i in range(len(self.Matches)):
             if case_insensitive:

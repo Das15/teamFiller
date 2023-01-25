@@ -40,26 +40,33 @@ class LadderImage(object):
         return output
 
     def draw_connections(self):
+        has_passed_losers_bracket = False
+
         for progression in self.bracket.Progressions:
             if "Losers" in progression:
                 continue
             source_id_match = self.bracket.get_match_from_id(progression["SourceID"])
             target_id_match = self.bracket.get_match_from_id(progression["TargetID"])
 
-            temp_pos = source_id_match.Position
-            beginning_point = [temp_pos["X"] + self.style.RectWidth + 5, temp_pos["Y"] + self.style.RectHeight]
-            first_line_coords = beginning_point + [beginning_point[0] + 10, beginning_point[1]]
+            if source_id_match.Losers != target_id_match.Losers:
+                if not has_passed_losers_bracket:
+                    has_passed_losers_bracket = True
+                    continue
+            self.draw_connection_lines(source_id_match, target_id_match)
 
-            self.canvas.line(first_line_coords, fill="black", width=1)
+    def draw_connection_lines(self, source_id_match, target_id_match):
+        beginning_point = [source_id_match.Position["X"] + self.style.RectWidth + 5,
+                           source_id_match.Position["Y"] + self.style.RectHeight]
+        first_line_coords = beginning_point + [beginning_point[0] + 10, beginning_point[1]]
+        self.canvas.line(first_line_coords, fill="black", width=1)
 
-            temp_pos = target_id_match.Position
-            second_line_coords = [first_line_coords[2], first_line_coords[3]] + \
-                                 [first_line_coords[2], temp_pos["Y"] + self.style.RectHeight]
-            self.canvas.line(second_line_coords, fill="black", width=1)
+        second_line_coords = [first_line_coords[2], first_line_coords[3]] + \
+                             [first_line_coords[2], target_id_match.Position["Y"] + self.style.RectHeight]
+        self.canvas.line(second_line_coords, fill="black", width=1)
 
-            third_line_coords = [second_line_coords[2], second_line_coords[3]] + \
-                                [temp_pos["X"] - 5, second_line_coords[3]]
-            self.canvas.line(third_line_coords, fill="black", width=1)
+        third_line_coords = [second_line_coords[2], second_line_coords[3]] + \
+                            [target_id_match.Position["X"] - 5, second_line_coords[3]]
+        self.canvas.line(third_line_coords, fill="black", width=1)
 
 
 if __name__ == "__main__":

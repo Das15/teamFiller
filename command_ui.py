@@ -10,6 +10,7 @@ import objects.mappool_data as mappool_data
 import objects.teams_data as teams_data
 import objects.challonge_response as challonge_response
 import apiRequests.challonge.querries as challonge_request
+import config
 
 
 # I love singletons, I really do, it's not like im being forced to make global variables or anything
@@ -78,7 +79,11 @@ def execute_functions(answers: list[str]):
     if "Mappool" in answers:
         bracket_data.Rounds = fill_mappool(bracket_data)
     if "Ladder" in answers:
-        bracket_data = fill_ladder(bracket_data)
+        # TODO: Put this check in initialize_ui or something
+        if config.get_config_value("challonge_api_key") != "":
+            bracket_data = fill_ladder(bracket_data)
+        else:
+            print("No challonge key in config, add it there first before trying to get ladder from challonge.")
     if "Teams" in answers:
         do_seeding_by_order = inquirer.confirm("Do you want to use seeding based on team order?", default=True)
         bracket_data = fill_teams(bracket_data, do_seeding_by_order)

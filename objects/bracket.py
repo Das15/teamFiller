@@ -70,5 +70,5 @@ def load_json(filename: str) -> Class:
             logging.info("Loading json bracket from 'bracket.json'")
             return Class(**json.loads(file.read()))
     except FileNotFoundError:
-        logging.error("Didn't find {}".format(filename))
+        logging.error("Didn't find bracket file '{}'".format(filename))
         exit(-1)

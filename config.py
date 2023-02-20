@@ -55,6 +55,7 @@ def get_and_verify_config_data(temp_config):
             temp = input(item.inputLabel)
             if item.verifyData == VerificationType.BANCHO:
                 if len(temp) < 40:
+                    print("API key is too short.")
                     continue
                 bancho_api.API_KEY = temp
                 check_result = bancho_api.check_if_user_id_exists("2")

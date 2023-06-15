@@ -3,11 +3,12 @@ import os
 
 
 def parse_cache(cache: list[str]) -> []:
+    """Cache file is just a very simple csv file"""
     temp = []
     for i in range(len(cache)):
         cache[i] = cache[i].replace("\n", "")
         if cache[i] == "":
-            logging.warning(f"Found empty space in cache entry {i + 1}.")
+            logging.warning(f"Found empty line in cache entry {i + 1}.")
             continue
         temp.append(cache[i].split("\t"))
     return temp

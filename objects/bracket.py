@@ -11,9 +11,11 @@ import objects.ruleset as ruleset
 
 class Class(object):
     # noinspection PyPep8Naming
+    """Yup, it is just bracket.json file, but parsed."""
     def __init__(self, Ruleset: ruleset, Matches: match, Rounds: list[dict], Teams: list[dict], Progressions: [],
                  ChromaKeyWidth: int, PlayersPerTeam: int, AutoProgressScreens: bool):
         temp = []
+        # Using ** to reduce amount of code required for parsing
         self.Ruleset = ruleset.Class(**Ruleset)
         for Match in Matches:
             temp.append(match.Class(**Match))
@@ -65,6 +67,8 @@ class Class(object):
 
 
 def load_json(filename: str) -> Class:
+    # Hmmmmm, should probably add another exception for incorrect formatting, maybe
+    # TODO: Make bracket.json more robust.
     try:
         with codecs.open(filename, "r", encoding="utf-8") as file:
             logging.info("Loading json bracket from 'bracket.json'")

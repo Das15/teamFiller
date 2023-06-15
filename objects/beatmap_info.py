@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Class:
+    """Simple dataclass used for parsing."""
     OnlineID: int
     DifficultyName: str
     BPM: float

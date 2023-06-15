@@ -14,6 +14,8 @@ import config
 
 
 # I love singletons, I really do, it's not like im being forced to make global variables or anything
+# Long story short, it's necessary to make QT framework word like I want it to.
+# Honestly I wonder why not just use web like app interface solution, should be simple enough.
 _filepath_app = None
 
 

@@ -26,14 +26,17 @@ def get_match_from_fifth_round(ladder_obj, match_index, middle_index, pool_lengt
 
 # Leaving this just in case something changes on challonge API side and I'll have to scan matches using suggested order
 # Also i have no clue on what i wrote here, since it works i assume it's fine.
+# I hope this will never be used.
 # TODO: refactor it or something, idk
 def get_match_from_suggested_order(ladder_obj, challonge_match_id: int) -> match.Class | None:
+    """DO NOT TOUCH THIS UNLESS YOU KNOW WHAT YOU ARE DOING"""
     internal_match_id = challonge_match_id - 1
     pool_length = len(ladder_obj.ladder[0])
     i = 0
     passed_matches_count = 0
     checks_fulfilled = 0
     # Why the fuck is this loop so hard to read?
+    # Oh, I'm sure 3 isn't a magic number, not at all.
     while checks_fulfilled < 3:
         if i == 0:
             if challonge_match_id <= pool_length:
@@ -45,7 +48,7 @@ def get_match_from_suggested_order(ladder_obj, challonge_match_id: int) -> match
             else:
                 passed_matches_count += 1
             if challonge_match_id <= passed_matches_count:
-                # Offset what? Why did i make it like this? I don't get it
+                # Offset what? Why did I make it like this? I don't get it
                 offset = passed_matches_count - pool_length
                 match_count = pool_length * 4
                 if checks_fulfilled > 1:
@@ -69,6 +72,7 @@ def get_match_from_suggested_order(ladder_obj, challonge_match_id: int) -> match
                     return get_match_from_fourth_round(ladder_obj, match_index, middle_index, pool_length)
                 return ladder_obj.ladder[i][internal_match_id - passed_matches_count + pool_length]
         i += 1
+        # I'm 99% certain this should be winner_round_match_count, but I'm leaving as it is.
         pool_length = int(pool_length / 2)
         if pool_length < 1:
             checks_fulfilled += 1

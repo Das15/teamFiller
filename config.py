@@ -10,6 +10,7 @@ config = {}
 
 @enum.unique
 class VerificationType(enum.Enum):
+    """Range from 0 to 2."""
     NONE = 0
     BANCHO = 1
     CHALLONGE_KEY = 2
@@ -40,6 +41,7 @@ class ConfigItem(object):
 
 def create_config():
     # Note to myself: osu key has length of 40
+    # Inspired by inquirer's solution.
     temp_config = [ConfigItem("bancho_api_key", "Please paste your bancho API key here: ",
                               VerificationType.BANCHO),
                    ConfigItem("challonge_api_key", "Please paste your challonge API key here (can be left empty): ",
@@ -49,6 +51,7 @@ def create_config():
 
 
 def get_and_verify_config_data(temp_config):
+    """Verifies data using the APIs."""
     config_data = {}
     for item in temp_config:
         while True:
@@ -76,6 +79,8 @@ def get_and_verify_config_data(temp_config):
     return config_data
 
 
+# Another fancy csv reader function, redundancy approved
+# TODO: Remove redundant code in reading files.
 def read_config():
     if not os.path.exists("config.cfg"):
         create_config()
@@ -91,9 +96,6 @@ def read_config():
     return config
 
 
+# Used for config testing.
 if __name__ == "__main__":
     print(get_config_value("challonge_api_key"))
-
-
-def exists():
-    return os.path.exists("config.cfg")

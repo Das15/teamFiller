@@ -30,6 +30,7 @@ def download_ladder_from_challonge(bracket_file):
 
 
 def legacy_edit_bracket():
+    """Do not use it without a good reason. Might be good for automation if I will bother to add params."""
     bracket_data = bracket.load_json("bracket.json")
     bracket_data.Rounds = load_mappool_from_file(bracket_data)
     bracket_data = load_teams_from_file(bracket_data, "teams.txt", assume_order_by_seeds=True)

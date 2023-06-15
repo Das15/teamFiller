@@ -9,6 +9,7 @@ ALPHABET_LENGTH = 26
 
 
 def get_match_id(identifier: str) -> int:
+    # Converting from ascii characters was an interesting problem to solve.
     match_id = 0
     exponential = 0
     for i in reversed(range(len(identifier))):
@@ -19,6 +20,7 @@ def get_match_id(identifier: str) -> int:
 
 
 def assign_scores(match_data: match.Class, scores: []) -> match.Class:
+    # I'm fairly certain this can be simplified further
     if scores[0] != "" and scores[1] != "":
         if scores[1] == "-1":
             match_data.Team1Score = match_data.PointsToWin

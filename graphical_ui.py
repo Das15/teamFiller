@@ -1,8 +1,10 @@
 import sys
 import os
 from PySide6 import QtWidgets, QtGui
-from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QGridLayout, QPushButton, QWidget
-from PySide6.QtGui import QAction
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QGridLayout, QPushButton, QWidget, QLabel, \
+    QScrollArea
+from PySide6.QtGui import QAction, QPicture, QImage, QPixmap
 
 
 class FileDialog(QFileDialog):
@@ -39,7 +41,7 @@ class Form(QMainWindow):
     def __init__(self, parent=None):
         super(Form, self).__init__(parent)
         self.setWindowTitle("Hello world")
-        self.resize(400, 200)
+        self.resize(800, 400)
 
         file_menu = self.menuBar().addMenu("&File")
         self.openAction = QtGui.QAction("&Open...", self)
@@ -61,18 +63,28 @@ class Form(QMainWindow):
         self.mappoolButton = QPushButton("Hello there!", self)
         self.ladderButton = QPushButton("Hi mark!", self)
 
-        layout = MainLayout(self)
+        self.imageDisplay = QLabel(self)
+        image = QImage()
+        image.load("C:\\Users\\Das\\PycharmProjects\\teamFiller\\output.png")
+        self.imageDisplay.setPixmap(QPixmap.fromImage(image))
 
-        layout.setColumnStretch(0, 1)
-        layout.setColumnStretch(1, 4)
+        self.scrollArea = QScrollArea()
+        self.scrollArea.setWidget(self.imageDisplay)
+
+        layout = QGridLayout()
+        self.scrollArea.setContentsMargins(0, 0, 0, 0)
 
         layout.addWidget(self.teamButton, 0, 0)
         layout.addWidget(self.mappoolButton, 1, 0)
-        layout.addWidget(self.ladderButton, 0, 1)
+        layout.addWidget(self.ladderButton, 2, 0)
+        layout.addWidget(self.scrollArea, 0, 1)
+        layout.setContentsMargins(0, 0, 0, 0)
 
         widget = QWidget()
         widget.setLayout(layout)
+        widget.setStyleSheet("background-color: blue")
         self.setCentralWidget(widget)
+        self.setStyleSheet("top: 0")
 
     def save_as_file(self):
         ...

@@ -12,6 +12,8 @@ else:
 def draw_name(name: str, canvas: ImageDraw, coords: list[int, int]) -> None:
     if name:
         name = name.upper()
+        if len(name) > 3:
+            name = name[0:2]
     else:
         name = ""
     canvas.text(coords, name, font=TEAM_FONT, fill=(0, 0, 0, 255))

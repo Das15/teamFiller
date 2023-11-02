@@ -74,4 +74,5 @@ if __name__ == "__main__":
     test = LadderImage(BRACKET)
     test.draw_matches()
     test.draw_connections()
-    test.image.show()
+    # test.image.show()
+    test.image.save("output.png", "png")

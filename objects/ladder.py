@@ -35,6 +35,7 @@ def scan_matches(bracket_data, round_names) -> list[list[mappool.Class]]:
 
 
 class Class(object):
+    # TODO: Handle some... lazy individuals who don't put the required amount of rounds
     def __init__(self, bracket_data: bracket.Class):
         self.roundNames = extract_round_names(bracket_data.Rounds)
         self.ladder = scan_matches(bracket_data, self.roundNames)

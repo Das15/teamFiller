@@ -6,5 +6,5 @@ class Class(object):
     ShortName: str
     Name: str
     InstantiationInfo: str
-    LastAppliedDifficultyVersion: int
+    # LastAppliedDifficultyVersion: int
     Available: bool = True

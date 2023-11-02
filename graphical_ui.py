@@ -1,7 +1,7 @@
 import sys
 import os
 from PySide6 import QtWidgets, QtGui
-from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QVBoxLayout, QPushButton, QWidget
+from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QGridLayout, QPushButton, QWidget
 from PySide6.QtGui import QAction
 
 
@@ -30,7 +30,7 @@ class FileDialog(QFileDialog):
             return self.opened_file_on_fail
 
 
-class MainLayout(QVBoxLayout):
+class MainLayout(QGridLayout):
     def __init__(self, parent=None):
         super(MainLayout, self).__init__(parent)
 
@@ -63,9 +63,12 @@ class Form(QMainWindow):
 
         layout = MainLayout(self)
 
-        layout.addWidget(self.teamButton)
-        layout.addWidget(self.mappoolButton)
-        layout.addWidget(self.ladderButton)
+        layout.setColumnStretch(0, 1)
+        layout.setColumnStretch(1, 4)
+
+        layout.addWidget(self.teamButton, 0, 0)
+        layout.addWidget(self.mappoolButton, 1, 0)
+        layout.addWidget(self.ladderButton, 0, 1)
 
         widget = QWidget()
         widget.setLayout(layout)

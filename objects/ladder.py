@@ -41,6 +41,7 @@ class Class(object):
 
     # TODO: Make function just a bit more readable
     def get_match_from_identifier(self, challonge_match_id: int) -> match.Class | None:
+        """I might have forgot how does this fuction work."""
         amount_of_winner_matches = len(self.ladder[0]) * 2
         amount_of_passed_winner_matches = 0
         total_amount_of_passed_matches = 0

@@ -11,3 +11,6 @@ teams.txt
 main.spec
 __pycache__/
 /venv
+/main.build/
+/main.dist/
+/main.onefile-build/

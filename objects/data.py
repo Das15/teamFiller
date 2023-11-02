@@ -20,6 +20,7 @@ def parse_csv_data_from_string_list(string: list[str]) -> list[list[str]]:
 
 
 def load_raw_data(path: str) -> list[list[str]]:
+    """It does in fact assume file is csv file. I should probably fix in the future."""
     logging.log(logging.INFO, f"Loading teams_data from '{path}'")
     with codecs.open(path, "r", encoding="utf-8") as file:
         temp = file.read().split("\n")

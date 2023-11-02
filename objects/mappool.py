@@ -4,6 +4,7 @@ import objects.beatmap as beatmap
 
 
 class Class(object):
+    """Used for representing mappool data in bracket."""
     def __key(self):
         return self.Name, self.Description, self.BestOf, self.Beatmaps, self.StartDate, self.Matches
 

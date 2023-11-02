@@ -16,6 +16,7 @@ def extract_mappool_names(bracket_mappools: list[mappool.Class]) -> list[str]:
 
 
 # noinspection PyPep8Naming
+# TODO: Refactor this function
 class Class(object):
     def __init__(self, bracketMappools: list[mappool.Class], modsFilename: str = "mods.txt",
                  mappoolFilename: str = "mappool.txt"):
@@ -39,6 +40,7 @@ class Class(object):
         for entry in self.mapEntries:
             name = entry[0][0:-1]
             if name not in self.mods:
+                # TODO: Change the way checking for mods work since it will break if there's above 10 maps
                 if entry[0] in self.mods:
                     maps.append(beatmap.Class(int(entry[1]), entry[0]))
                     continue

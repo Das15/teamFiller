@@ -1,10 +1,9 @@
 import sys
 import os
 from PySide6 import QtWidgets, QtGui
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QGridLayout, QPushButton, QWidget, QLabel, \
-    QScrollArea
-from PySide6.QtGui import QAction, QPicture, QImage, QPixmap
+from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QPushButton, QWidget, QLabel, \
+    QScrollArea, QHBoxLayout, QVBoxLayout
+from PySide6.QtGui import QImage, QPixmap
 
 
 class FileDialog(QFileDialog):
@@ -30,11 +29,6 @@ class FileDialog(QFileDialog):
             os.startfile(self.opened_file_on_fail)
             input("Press enter when done editing the file.")
             return self.opened_file_on_fail
-
-
-class MainLayout(QGridLayout):
-    def __init__(self, parent=None):
-        super(MainLayout, self).__init__(parent)
 
 
 class Form(QMainWindow):
@@ -71,20 +65,26 @@ class Form(QMainWindow):
         self.scrollArea = QScrollArea()
         self.scrollArea.setWidget(self.imageDisplay)
 
-        layout = QGridLayout()
+        main_layout = QHBoxLayout()
+        button_layout = QVBoxLayout()
+        image_layout = QVBoxLayout()
+
         self.scrollArea.setContentsMargins(0, 0, 0, 0)
 
-        layout.addWidget(self.teamButton, 0, 0)
-        layout.addWidget(self.mappoolButton, 1, 0)
-        layout.addWidget(self.ladderButton, 2, 0)
-        layout.addWidget(self.scrollArea, 0, 1)
-        layout.setContentsMargins(0, 0, 0, 0)
+        button_layout.addWidget(self.teamButton)
+        button_layout.addWidget(self.mappoolButton)
+        button_layout.addWidget(self.ladderButton)
+        button_layout.setContentsMargins(0, 0, 0, 0)
+
+        image_layout.addWidget(self.scrollArea)
+
+        main_layout.addLayout(button_layout)
+        main_layout.addLayout(image_layout)
+        main_layout.setContentsMargins(0, 0, 0, 0)
 
         widget = QWidget()
-        widget.setLayout(layout)
-        widget.setStyleSheet("background-color: blue")
+        widget.setLayout(main_layout)
         self.setCentralWidget(widget)
-        self.setStyleSheet("top: 0")
 
     def save_as_file(self):
         ...

@@ -15,7 +15,7 @@ class Class(object):
         return hash(self.__key())
 
     # noinspection PyPep8Naming
-    def __init__(self, Name, Description: str = None, BestOf: int = 9, Beatmaps: list[dict] = None,
+    def __init__(self, Name, Description: str = None, BestOf: int = 9, BanCount: int = 1, Beatmaps: list[dict] = None,
                  StartDate: str = datetime.datetime.now(), Matches=None):
         if Matches is None:
             Matches = []
@@ -24,6 +24,7 @@ class Class(object):
         self.Name = Name
         self.Description = Description
         self.BestOf = BestOf
+        self.BanCount = BanCount
         temp = []
         for Beatmap in Beatmaps:
             temp.append(beatmap.Class(**Beatmap))

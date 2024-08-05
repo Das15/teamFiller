@@ -13,7 +13,8 @@ class Class(object):
     # noinspection PyPep8Naming
     """Yup, it is just bracket.json file, but parsed."""
     def __init__(self, Ruleset: ruleset, Matches: match, Rounds: list[dict], Teams: list[dict], Progressions: [],
-                 ChromaKeyWidth: int, PlayersPerTeam: int, AutoProgressScreens: bool, SplitMapPoolByMods: bool):
+                 ChromaKeyWidth: int, PlayersPerTeam: int, AutoProgressScreens: bool, SplitMapPoolByMods: bool,
+                 DisplayTeamSeeds: bool):
         temp = []
         # Using ** to reduce amount of code required for parsing
         self.Ruleset = ruleset.Class(**Ruleset)
@@ -34,6 +35,7 @@ class Class(object):
         self.PlayersPerTeam = PlayersPerTeam
         self.AutoProgressScreens = AutoProgressScreens
         self.SplitMapPoolByMods = SplitMapPoolByMods
+        self.DisplayTeamSeeds = DisplayTeamSeeds
 
     def get_acronym_from_name(self, team_name: str) -> str | None:
         for i in range(len(self.Teams)):

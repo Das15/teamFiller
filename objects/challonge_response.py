@@ -37,6 +37,16 @@ def assign_scores(match_data: match.Class, scores: []) -> match.Class:
     return match_data
 
 
+def count_scores(scores: str) -> []:
+    returned_score = [0, 0]
+    parsed_scores = scores.split(",")
+    for score_line in parsed_scores:
+        score = [int(entry) for entry in score_line.split("-")]
+        returned_score[0] += score[0]
+        returned_score[1] += score[1]
+    return returned_score
+
+
 class Class(object):
     def __init__(self, body):
         self._body = body
@@ -68,8 +78,10 @@ class Class(object):
                 minus_pos = challonge_match["scores_csv"].find("-")
                 if minus_pos == 0:
                     scores = [0, bracket_match.PointsToWin]
+                elif not challonge_match.get("scores_csv"):
+                    scores = [0, 0]
                 else:
-                    scores = [challonge_match["scores_csv"][0:minus_pos], challonge_match["scores_csv"][minus_pos+1:]]
+                    scores = count_scores(challonge_match["scores_csv"])
                 bracket_match.replace_acronyms(acronyms)
                 bracket_match = assign_scores(bracket_match, scores)
                 bracket_match.Completed = True

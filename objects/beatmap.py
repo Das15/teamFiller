@@ -28,7 +28,7 @@ class Class(object):
                         if BeatmapInfo["Metadata"] is not None:
                             self.BeatmapInfo = beatmap_info.Class(**BeatmapInfo)
                 except AttributeError:
-                    logging.error(f"Didn't found id {ID} in BeatmapInfo.")
+                    logging.error(f"Didn't find id {ID} in BeatmapInfo.")
                 except TypeError:
                     logging.error(f"Wrong BeatmapInfo found in {ID} OR someone changed json key names again.")
 

@@ -39,8 +39,10 @@ class Class(object):
 
     def get_acronym_from_name(self, team_name: str) -> str | None:
         for i in range(len(self.Teams)):
-            if team_name == self.Teams[i].FullName:
+            # Case insensitive in case SOMEONE wrote the name lowercase
+            if team_name.lower() == self.Teams[i].FullName.lower():
                 return self.Teams[i].Acronym
+        logging.error(f"Didn't find acronym for name {team_name}.")
         return None
 
     def replace_match(self, match_data: match.Class) -> bool:
@@ -48,6 +50,7 @@ class Class(object):
             if match_data.ID == self.Matches[i].ID:
                 self.Matches[i] = match_data
                 return True
+        logging.error(f"Didn't find match {match_data.ID} {match_data.Acronyms[0]} vs {match_data.Acronyms[1]}.")
         return False
 
     def get_match_id(self, acronyms: [], case_insensitive: bool = True) -> int | None:

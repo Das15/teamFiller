@@ -23,7 +23,7 @@ def read_cache(tourney_name: str, acceptable_time_difference: int = 7200):
     path = os.path.join(CACHE_PATH, f"{tourney_name.lower()}.json")
     if os.path.exists(path):
         file_modification_timestamp = round(time.time() - os.path.getmtime(path))
-        logging.info(f"Diff of current and file creation time of challonge responnse is {file_modification_timestamp} "
+        logging.info(f"Diff of current and file creation time of challonge response is {file_modification_timestamp} "
                      f"seconds.")
         if file_modification_timestamp > acceptable_time_difference:
             return None
